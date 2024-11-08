@@ -13,6 +13,9 @@
             <div v-else>
                 <ButtonComponent btn-class="btn btn-secondary btn-lg" text="Ingresar" disabled/>
             </div>
+            <div v-if="isLoading" class="text-center">
+                <SpinnerComponent />
+            </div>
         </div>
     </section>
 </template>
@@ -20,16 +23,19 @@
 <script>
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
+import SpinnerComponent from '@/components/SpinnerComponent.vue';
 
 export default{
     name: 'LoginView',
     components: {
         InputComponent,
-        ButtonComponent
+        ButtonComponent,
+        SpinnerComponent
     },
     data() {
         return {
-        isUserValid: null
+        isUserValid: null,
+        isLoading: false
         };
     },
     methods: {
@@ -37,8 +43,13 @@ export default{
             this.isUserValid = isValid;
         },
         handleLogin() {
-            if(this.isUserValid)
-            this.$router.push({ name: 'Home' });
+            if(this.isUserValid){
+                this.isLoading = true;
+                setTimeout(() => {
+                    this.isLoading = false;
+                    this.$router.push({ name: 'Home' });
+                }, 2000);
+            }
         }
     }
 }
