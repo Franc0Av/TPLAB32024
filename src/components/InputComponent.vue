@@ -1,8 +1,8 @@
 <template>
     <div class="d-flex justify-content-center w-full">
-      <div class="d-flex flex-row align-items-center gap-5">
+      <div class="d-flex flex-row align-items-center gap-2">
         <div>
-          <i class="bi bi-person-fill-lock fs-2"></i>
+          <i class="bi bi-person-fill-lock fs-1"></i>
           <label for="validationServer03" class="form-label"></label>
         </div>
         <div>

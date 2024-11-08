@@ -12,8 +12,13 @@ export default function useUserInput() {
   });
 
   watch(userInput, (value) => {
-    const alphanumericRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$/;
-    isValid.value = alphanumericRegex.test(value);
+    if (value === '') {
+      isValid.value = null;
+    }
+    else{
+      const alphanumericRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9._]+$/;
+      isValid.value = alphanumericRegex.test(value) && value.length >= 5;
+    }
   });
 
   return {
