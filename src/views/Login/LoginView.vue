@@ -4,14 +4,17 @@
             <div>
                 <InputComponent @validityChanged="setUserValidity" />
             </div>
-            <div style="color: #dc3545;" v-if="isUserValid === false">
-                <p>El usuario debe ser alfanumérico.</p>
+            <div :style="{ color: '#dc3545', height: '20px' }">
+                <small v-if="isUserValid === false">El usuario debe ser alfanumérico y contener al menos 5 caracteres.</small>
             </div>
             <div v-if="isUserValid">
-                <ButtonComponent @click="handleLogin" btn-class="btn btn-primary btn-lg" text="Ingresar"/>
+                <ButtonComponent @click="handleLogin" id="btn-custom" btn-class="btn btn-lg" text="Ingresar"/>
             </div>
             <div v-else>
                 <ButtonComponent btn-class="btn btn-secondary btn-lg" text="Ingresar" disabled/>
+            </div>
+            <div v-if="isLoading" class="text-center">
+                <SpinnerComponent />
             </div>
         </div>
     </section>
@@ -20,16 +23,19 @@
 <script>
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
+import SpinnerComponent from '@/components/SpinnerComponent.vue';
 
 export default{
     name: 'LoginView',
     components: {
         InputComponent,
-        ButtonComponent
+        ButtonComponent,
+        SpinnerComponent
     },
     data() {
         return {
-        isUserValid: null
+        isUserValid: null,
+        isLoading: false
         };
     },
     methods: {
@@ -37,29 +43,18 @@ export default{
             this.isUserValid = isValid;
         },
         handleLogin() {
-            if(this.isUserValid)
-            this.$router.push({ name: 'Home' });
+            if(this.isUserValid){
+                this.isLoading = true;
+                setTimeout(() => {
+                    this.isLoading = false;
+                    this.$router.push({ name: 'Home' });
+                }, 2000);
+            }
         }
     }
 }
 </script>
 
 <style scoped>
-.login{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 90vw;
-    height: 100vh;
-    gap: 2em;
-    background-image: url('../assets/undraw_secure_login_pdn4.svg');
-    background-size: 60% 70%;
-    background-repeat: no-repeat;
-    background-position: 33% 67%;
-}
-#login-box{
-    min-width: 100vw;
-    min-height: 100vh;
-}
+@import './LoginView.css';
 </style>
