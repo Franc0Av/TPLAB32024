@@ -48,7 +48,7 @@ export default{
                 setTimeout(() => {
                     this.isLoading = false;
                     this.$router.push({ name: 'Home' });
-                }, 2000);
+                }, 1500);
             }
         }
     }
