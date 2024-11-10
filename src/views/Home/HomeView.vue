@@ -1,6 +1,19 @@
 <template>
+    <NavComponent class="navBar"/>
     <section class="home">
-        <NavComponent />
+        <div>
+            <img src="../../assets/bitcoin.svg" alt="">
+        </div>
+        <div class="texto">
+            <div>
+                <h1>¡Bienvenido a Cryptoexchange!</h1>
+            </div>
+            <div>
+                <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe veniam cupiditate voluptatem sunt tempore sed modi esse? Consequuntur fuga voluptates quasi, quam minus dolorem et eligendi eos asperiores nostrum ipsum?
+                </p>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -19,5 +32,15 @@ export default{
 .home{
     display: flex;
     justify-content: center;
+    margin-top: 60px;
+}
+.navBar{
+    justify-self: center;
+}
+.texto{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40vw;
 }
 </style>

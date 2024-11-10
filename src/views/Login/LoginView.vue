@@ -2,6 +2,16 @@
     <section id="login-box" class="d-flex align-items-center justify-content-center">
         <div class="login">
             <div>
+                <div class="avatar-login">
+                    <div>
+                        <img id="imgAvatar" src="../../assets/avatar.svg" alt="avatar">
+                    </div>
+                    <div>
+                        <img id="imgAvatar" src="../../assets/femaleavatar.svg" alt="avatar">
+                    </div>
+                </div>
+            </div>
+            <div>
                 <InputComponent @validityChanged="setUserValidity" />
             </div>
             <div :style="{ color: '#dc3545', height: '20px' }">
@@ -13,7 +23,7 @@
             <div v-else>
                 <ButtonComponent btn-class="btn btn-secondary btn-lg" text="Ingresar" disabled/>
             </div>
-            <div v-if="isLoading" class="text-center">
+            <div v-if="isLoading" class="spinner-login">
                 <SpinnerComponent />
             </div>
         </div>
