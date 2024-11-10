@@ -1,11 +1,26 @@
 <template>
+  <nav-component v-if="isUserValid" class="navBar" />
   <RouterView />
 </template>
 
 <script>
+import { useAuthStore } from './stores/auth';
+import { storeToRefs } from 'pinia';
+import NavComponent from './components/NavComponent.vue';
 
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    NavComponent
+  },
+  setup() {
+    const store = useAuthStore();
+    const { isUserValid } = storeToRefs(store);
+
+    return {
+      isUserValid
+    };
+  },
 }
 </script>
 
@@ -19,5 +34,9 @@ export default {
   margin-top: 40px;
   min-width: 100vw;
   min-height: 100vh;
+}
+
+.navBar{
+    justify-self: center;
 }
 </style>

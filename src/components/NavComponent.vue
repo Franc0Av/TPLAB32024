@@ -20,13 +20,30 @@
         </div>
         <div class="avatar">
             <img src="../assets/avatar.svg" alt="">
-            ¡Hola, Franco!
+            ¡Hola, {{ user }}!
             <router-link class="custom-link" :to="{name: 'Login'}">
                 <ion-icon name="log-out-outline"></ion-icon>
             </router-link>
         </div>
     </div>
 </template>
+
+<script>
+import { useAuthStore } from '@/stores/auth.js';
+import { storeToRefs } from 'pinia';
+
+export default {
+  name: 'NavComponent',
+  setup() {
+    const store = useAuthStore();
+    const { user } = storeToRefs(store);
+
+    return {
+      user
+    };
+  },
+};
+</script>
 
 <style scoped>
 .nav{
