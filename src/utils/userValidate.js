@@ -24,7 +24,6 @@ export default function useUserInput() {
 
     if(isValid.value)
       authStore.setUsername(userInput.value)
-      authStore.setUserValid()
   });
 
   return {

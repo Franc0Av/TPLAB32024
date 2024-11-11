@@ -1,5 +1,5 @@
 <template>
-  <nav-component v-if="isUserValid" class="navBar" />
+  <nav-component v-if="isUserLogged" class="navBar" />
   <RouterView />
 </template>
 
@@ -15,10 +15,10 @@ export default {
   },
   setup() {
     const store = useAuthStore();
-    const { isUserValid } = storeToRefs(store);
+    const { isUserLogged } = storeToRefs(store);
 
     return {
-      isUserValid
+      isUserLogged
     };
   },
 }

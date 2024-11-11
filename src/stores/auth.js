@@ -4,7 +4,8 @@ export const useAuthStore = defineStore( 'auth', {
 
     state: () => ({
         user: null,
-        isUserValid: null
+        isUserValid: null,
+        isUserLogged: null
     }),
 
     actions: {
@@ -13,8 +14,12 @@ export const useAuthStore = defineStore( 'auth', {
             this.user = value;
         },
 
-        setUserValid(){
-            this.isUserValid = true
+        setIsUserLogged(){
+            this.isUserLogged = true
         }
+    },
+
+    getters: {
+        getIsUserLogged: (state) => state.isUserLogged
     }
 })

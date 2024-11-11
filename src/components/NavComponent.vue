@@ -21,9 +21,9 @@
         <div class="avatar">
             <img src="../assets/avatar.svg" alt="">
             ¡Hola, {{ user }}!
-            <router-link class="custom-link" :to="{name: 'Login'}">
+            <button @click="logOut">
                 <ion-icon name="log-out-outline"></ion-icon>
-            </router-link>
+            </button>
         </div>
     </div>
 </template>
@@ -31,15 +31,25 @@
 <script>
 import { useAuthStore } from '@/stores/auth.js';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'NavComponent',
   setup() {
     const store = useAuthStore();
-    const { user } = storeToRefs(store);
+    const router = useRouter();
+    const { user, isUserLogged } = storeToRefs(store);
+
+    const logOut = () => {
+            store.isUserLogged = false;
+            router.push({ name: 'Login' });
+            console.log(store.isUserLogged)
+        };
 
     return {
-      user
+      user,
+      isUserLogged,
+      logOut
     };
   },
 };
