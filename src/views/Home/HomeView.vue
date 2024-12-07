@@ -18,14 +18,11 @@
 </template>
 
 <script>
-import NavComponent from '@/components/NavComponent.vue';
 
 export default{
-    name: 'HomeView',
-    components: {
-        NavComponent
-    }
+    name: 'HomeView'
 }
+
 </script>
 
 <style scoped>
@@ -34,9 +31,7 @@ export default{
     justify-content: center;
     margin-top: 60px;
 }
-.navBar{
-    justify-self: center;
-}
+
 .texto{
     display: flex;
     flex-direction: column;
