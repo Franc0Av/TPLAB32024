@@ -2,13 +2,19 @@
     <div class="transactions-box">
         <section class="sale-box">
             <h2>Nueva Compra</h2>
-            <div class="input-box">
-                <input type="text" required>
+            <form @submit.prevent="submitForm" class="input-box">
+                <label for="cryptocurrency">Selecciona una criptomoneda:</label>
+                <select v-model="selectedCrypto" id="cryptocurrency">
+                <option v-for="crypto in cryptocurrencies" :key="crypto.id" :value="crypto.name">
+                {{ crypto.name }}
+                </option>
+                </select>
                 <input type="number" required>
-                <input type="text" required>
-                <button>Comprar</button>
-            </div>
+                <input type="number" required>
+                <button type="submit">Comprar</button>
+            </form>
         </section>
+
         <section>
             <h2>
                 Nueva Venta
@@ -22,6 +28,28 @@
         </section>
     </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      selectedCrypto: "",
+      cryptocurrencies: [
+        { id: 1, name: "BTC" },
+        { id: 2, name: "ETH" },
+        { id: 3, name: "USDT" },
+        { id: 4, name: "SOL" }
+      ]
+    };
+  },
+  methods: {
+    submitForm() {
+      alert(`Has seleccionado: ${this.selectedCrypto}`);
+      // Aquí puedes realizar la lógica para procesar la compra
+    }
+  }
+};
+</script>
 
 <style>
 .transactions-box{
