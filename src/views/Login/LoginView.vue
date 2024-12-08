@@ -47,16 +47,13 @@ export default{
         SpinnerComponent
     },
     setup() {
-        // Usamos useAuthStore() para acceder al store
         const authStore = useAuthStore();
         const router = useRouter();
-        const { isUserLogged } = storeToRefs(authStore); // Si necesitas acceder al estado del store directamente
+        const { isUserLogged } = storeToRefs(authStore);
 
-        // Definir variables reactivas
         const isUserValid = ref(null);
         const isLoading = ref(false);
 
-        // Método para manejar la validez del usuario
         const setUserValidity = (isValid) => {
             isUserValid.value = isValid;
         };
@@ -68,7 +65,6 @@ export default{
                     isLoading.value = false;
                     authStore.isUserLogged = true;
                     console.log(authStore.isUserLogged)
-                    // Navegar al Home después de login
                     router.push({ name: 'Home' });
                 }, 1500);
             }
