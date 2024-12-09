@@ -1,19 +1,19 @@
 <template>
     <div class="nav">
         <div class="routes">
-            <div class="icon-box">
+            <div class="icon-box" :class="{ active: $route.name === 'Home' }">
                 <ion-icon name="home"></ion-icon>
                 <router-link class="custom-link" :to="{name: 'Home'}">Home</router-link>
             </div>
-            <div class="icon-box">
+            <div class="icon-box" :class="{ active: $route.name === 'Transactions' }">
                 <ion-icon name="logo-bitcoin"></ion-icon>
                 <router-link class="custom-link" :to="{name: 'Transactions'}">Transacciones</router-link>
             </div>
-            <div class="icon-box">
+            <div class="icon-box" :class="{ active: $route.name === 'Movements' }">
                 <ion-icon name="swap-vertical"></ion-icon>
                 <router-link class="custom-link" :to="{name: 'Movements'}">Movimientos</router-link>
             </div>
-            <div class="icon-box">
+            <div class="icon-box" :class="{ active: $route.name === 'Analysis' }">
                 <ion-icon name="wallet-outline"></ion-icon>
                 <router-link class="custom-link" :to="{name: 'Analysis'}">Mi Cartera</router-link>
             </div>
@@ -110,7 +110,12 @@ ion-icon {
     background: linear-gradient(to top, #a9a5f8ff 0%, #6c63ffff 100%);
     color: white;
     cursor: pointer;
+}
 
+.icon-box.active {
+    background: linear-gradient(to top, #a9a5f8ff 0%, #6c63ffff 100%);
+    color: white;
+    cursor: pointer;
 }
 
 .custom-link {

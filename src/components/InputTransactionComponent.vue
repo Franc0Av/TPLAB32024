@@ -11,6 +11,8 @@
           :class="inputClass"
           id="validationServer03"
           aria-describedby="validationServer03Feedback"
+          :placeholder="placeholder"
+          :readonly="readonly"
           required
           />
         </div>
@@ -25,26 +27,51 @@ import amountValidate from '@/utils/transactionValidate';
 export default {
   name: 'InputComponent',
   props: {
+    modelValue: {
+      type: [String, Number],
+      default: '',
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
     type: {
       type: String,
       required: true,
     },
+    placeholder: {
+      type: String
+    }
   },
   setup(props, { emit }) {
+
     const { amountInput, inputClass, isValid } = amountValidate(props.type);
 
-    watch(isValid, (newVal) => {
-      emit('validityChanged', newVal);
-    });
+    watch(
+      () => props.modelValue,
+      (newVal) => {
+        if (newVal !== amountInput.value) {
+          amountInput.value = newVal;
+        }
+      }
+    );
 
     watch(amountInput, (newVal) => {
-      emit('inputChanged', newVal); // Emite el valor actual del input
+      emit('update:modelValue', newVal);
+    });
+
+    // watch(isValid, (newVal) => {
+    //   emit('validityChanged', newVal);
+    // });
+
+    watch(amountInput, (newVal) => {
+      emit('inputChanged', newVal);
     });
 
     return {
       amountInput,
       inputClass,
-      isValid,
+      isValid
     };
   },
 };

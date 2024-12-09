@@ -6,7 +6,7 @@ export default function amountValidate(type = 'buy') {
 
   const regexRules = {
     buy: /^(?!0\d)(\d+(\.\d+)?|0\.\d+)$/,
-    pay: /^(?!0\d)\d+$/               
+    pay: /^(?!0\d)\d+(\.\d{1,2})?$/               
   };
 
   const inputClass = computed(() => {

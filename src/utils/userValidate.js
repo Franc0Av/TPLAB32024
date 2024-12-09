@@ -29,6 +29,6 @@ export default function useUserInput() {
   return {
     userInput,
     inputClass,
-    isValid,
+    isValid
   };
 }
