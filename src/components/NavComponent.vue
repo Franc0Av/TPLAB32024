@@ -41,10 +41,9 @@ export default {
     const { user, isUserLogged } = storeToRefs(store);
 
     const logOut = () => {
-            store.isUserLogged = false;
-            router.push({ name: 'Login' });
-            console.log(store.isUserLogged)
-        };
+        store.isUserLogged = false;
+        router.push({ name: 'Login' });
+    };
 
     return {
       user,
@@ -107,13 +106,13 @@ ion-icon {
 }
 
 .icon-box:hover{
-    background: linear-gradient(to top, #a9a5f8ff 0%, #6c63ffff 100%);
+    background-color: #6c63ff;
     color: white;
     cursor: pointer;
 }
 
 .icon-box.active {
-    background: linear-gradient(to top, #a9a5f8ff 0%, #6c63ffff 100%);
+    background-color: #6c63ff;
     color: white;
     cursor: pointer;
 }

@@ -36,8 +36,7 @@ export default {
       default: false,
     },
     type: {
-      type: String,
-      required: true,
+      type: String
     },
     placeholder: {
       type: String
