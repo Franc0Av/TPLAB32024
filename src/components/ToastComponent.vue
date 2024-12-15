@@ -11,16 +11,13 @@
   
   <script>
   import { ref } from 'vue';
-  import 'bootstrap/dist/css/bootstrap.min.css';
-  import 'bootstrap/dist/js/bootstrap.bundle.min.js';
   import bootstrapBundle from 'bootstrap/dist/js/bootstrap.bundle';
   
   export default {
     name: 'SuccessToast',
     props: {
         toastType: {
-            type: String,
-            default: 'success'
+            type: String
         },
         toastMessage: String
     },
@@ -31,6 +28,14 @@
         const myToast = new bootstrapBundle.Toast(toastElement.value);
         myToast.show();
       };
+
+      // watch(
+      // () => [props.toastType, props.toastMessage],
+      // ([newType, newMessage], [oldType, oldMessage]) => {
+      //   if (newType !== oldType || newMessage !== oldMessage) {
+      //     showToast();
+      //   }
+      // });
   
       return {
         toastElement,

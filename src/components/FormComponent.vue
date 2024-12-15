@@ -5,12 +5,16 @@
                 <div class="d-flex flex-column justify-content-around align-items-center gap-5">
                   <div class="d-flex align-items-center fs-3 gap-3">
                     <i class="bi bi-card-checklist"></i>
-                    <select class="form-select form-select-md" v-model="selectedCrypto" id="cryptocurrency">
+                    <select class="form-select form-select-md" v-model="selectedCrypto" @change="handleTotals" id="cryptocurrency">
                       <option value="" disabled>Selecciona una opción</option>
                       <option v-for="crypto in cryptocurrencies" :key="crypto.id" :value="crypto.name">
                       {{ crypto.name }}
                       </option>
                     </select>
+                  </div>
+                  <div v-if="transactionType == 'Venta'" class="d-flex align-items-center fs-3">
+                    <i class="bi bi-coin text-warning"></i>
+                    <InputTransactionComponent v-model="availableCoin" @inputChanged="handleAvailableCoin" placeholder='Monto disponible' readonly />
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-coin text-warning"></i>
@@ -55,6 +59,7 @@ export default {
         return {
             selectedCrypto: "",
             amount: null,
+            availableCoin: null,
             purchase: false,
             sale: false,
             price: null,
@@ -77,6 +82,7 @@ export default {
     watch: {
         amount: "updatePrice",
         selectedCrypto: "updatePrice",
+        availableCoin: "handleTotals"
     },
     setup(){
         const store = useAuthStore();
@@ -88,14 +94,19 @@ export default {
         handleAmount(value) {
             this.amount = value;
         },
+        handleAvailableCoin(value){
+            this.availableCoin = value;
+        },
         async updatePrice() {
 
             let cryptoCoin = await formatCryptoCoin(this.selectedCrypto);
 
             if (this.amount && this.selectedCrypto) {
-                try {
-                    this.price = await calculateAmount(this.amount, cryptoCoin);
-                } catch (error) {
+                try 
+                {
+                    this.price = await calculateAmount(this.amount, cryptoCoin, this.transactionType);
+                } catch (error) 
+                {
                     console.error("Error al calcular el monto:", error);
                     this.price = null;
                 }
@@ -121,9 +132,25 @@ export default {
             console.log(data);
         },
         async handleTotals(){
-            let crypto = await formatCryptoCoin(this.selectedCrypto);
-            const data = await calculateTotals(this.user, crypto);
-            console.log(data);
+
+            if(this.selectedCrypto)
+            {
+                try{
+
+                    let crypto = await formatCryptoCoin(this.selectedCrypto);
+                    const data = await calculateTotals(this.user, crypto);
+    
+                    this.availableCoin = data;
+
+                }catch (error){
+                    console.error("Error al obtener el monto disponible:", error);
+                    this.availableCoin = null;
+                }
+                
+            }
+            else{
+                this.availableCoin = null;
+            }
         }
     }
 }
