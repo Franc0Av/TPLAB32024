@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-//const url = 'https://laboratorio3-f36a.restdb.io/rest/transactions'
-
 const instance = axios.create({
+    //baseURL:'/api/rest/transactions',
     baseURL:'https://laboratorio3-f36a.restdb.io/rest/transactions',
     headers: {
         'x-apikey': '60eb09146661365596af552f',
@@ -19,7 +18,7 @@ export async function addTransaction(body) {
 
     try {
         const response = await instance.post('', body);
-        return response.data;
+        return {data: response.data, success: true};
 
     } catch (error) {
         console.error('Error al consultar la API:', error.message, error.response?.data);
@@ -34,10 +33,9 @@ export async function getTransactions(idUser){
     }
 
     try{
-        //const query = `?q={"user_id":"${idUser}"}`;
         const params = { q: JSON.stringify({ user_id: idUser }) };
         const response = await instance.get('', {params});
-        return response.data;
+        return {data: response.data, success: true};
     } catch  (error) {
         console.error('Error al consultar la API:', error.message, error.response?.data);
         return { success: false, message: error.message };

@@ -14,32 +14,35 @@
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-coin text-warning"></i>
-                    <InputTransactionComponent @inputChanged="handleAmount" placeholder="Monto a comprar" />
+                    <InputTransactionComponent @inputChanged="handleAmount" :placeholder="transactionType == 'Compra' ? 'Monto a comprar' : 'Monto a vender'" />
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-cash-coin text-success"></i>
-                    <InputTransactionComponent v-model="price" type="pay" placeholder="Monto a pagar" readonly />
+                    <InputTransactionComponent v-model="price" type="pay" :placeholder="transactionType == 'Compra' ? 'Monto a pagar' : 'Monto a recibir'" readonly />
                   </div>
                 </div>
-                <ButtonComponent text="Comprar" id="btn-custom" class="btn btn-lg" :disabled="price == null"/>
-                <button @click="getUserTransactions">Get</button>
+                <ButtonComponent :text="transactionType == 'Compra' ? 'Comprar' : 'Vender'" id="btn-custom" class="btn btn-lg" :disabled="price == null" data-bs-toggle="modal" data-bs-target="#staticBackdrop"/>
+                <button @click="handleTotals">Test</button>
             </form>
+            <ModalComponent :transactionBody="transactionBody" :cryptoSelected="selectedCrypto" modalTitle="Confirmar transacción" btnText="Confirmar"/>
         </section>
 </template>
 
 <script>
 import InputTransactionComponent from '@/components/InputTransactionComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
+import ModalComponent from './ModalComponent.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { storeToRefs } from 'pinia';
-import { calculateAmount } from '@/views/Transactions/TransactionsView';
-import { addTransaction, getTransactions } from '@/Services/transactions';
+import { calculateAmount, formatCryptoCoin, calculateTotals } from '@/views/Transactions/TransactionsView';
+import { getTransactions } from '@/Services/transactions';
 import dayjs from 'dayjs';
 
 export default {
     components:  {
         InputTransactionComponent,
-        ButtonComponent
+        ButtonComponent,
+        ModalComponent
     },
     props: {
         actionTitle: String,
@@ -56,11 +59,19 @@ export default {
             sale: false,
             price: null,
             cryptocurrencies: [
-                { id: 1, name: "BTC" },
-                { id: 2, name: "ETH" },
+                { id: 1, name: "Bitcoin" },
+                { id: 2, name: "Ethereum" },
                 { id: 3, name: "USDT" },
                 { id: 4, name: "DAI" }
-            ]
+            ],
+            transactionBody: {
+                user_id: '',
+                action: '',
+                crypto_code: '',
+                crypto_amount: 0,
+                money: 0,
+                datetime: ''
+            }
         };
     },
     watch: {
@@ -78,9 +89,12 @@ export default {
             this.amount = value;
         },
         async updatePrice() {
+
+            let cryptoCoin = await formatCryptoCoin(this.selectedCrypto);
+
             if (this.amount && this.selectedCrypto) {
                 try {
-                    this.price = await calculateAmount(this.amount, this.selectedCrypto);
+                    this.price = await calculateAmount(this.amount, cryptoCoin);
                 } catch (error) {
                     console.error("Error al calcular el monto:", error);
                     this.price = null;
@@ -93,25 +107,22 @@ export default {
 
             const formattedDate = dayjs().format('DD-MM-YYYY HH:mm');
 
-            const transactionBody = {
+            this.transactionBody = {
                 user_id: this.user,
                 action: this.transactionType.toLowerCase() == "compra" ? "purchase" : "sale",
-                crypto_code: this.selectedCrypto.toLowerCase(),
+                crypto_code: await formatCryptoCoin(this.selectedCrypto),
                 crypto_amount: this.amount,
                 money: this.price,
                 datetime: formattedDate
             };
-
-            try {
-                const response = await addTransaction(transactionBody);
-                console.log('Accion elegida: ', this.transactionType)
-                console.log('Transacción exitosa:', response);
-            } catch (error) {
-                console.error('Error al realizar la transacción:', error);
-            }
         },
         async getUserTransactions() {
             const data = await getTransactions(this.user);
+            console.log(data);
+        },
+        async handleTotals(){
+            let crypto = await formatCryptoCoin(this.selectedCrypto);
+            const data = await calculateTotals(this.user, crypto);
             console.log(data);
         }
     }
