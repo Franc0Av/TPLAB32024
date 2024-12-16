@@ -23,9 +23,6 @@
             <div v-else>
                 <ButtonComponent btn-class="btn btn-secondary btn-lg" text="Ingresar" disabled/>
             </div>
-            <div v-if="isLoading" class="spinner-login">
-                <SpinnerComponent />
-            </div>
         </div>
     </section>
 </template>
@@ -33,7 +30,6 @@
 <script>
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
-import SpinnerComponent from '@/components/SpinnerComponent.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -43,8 +39,7 @@ export default{
     name: 'LoginView',
     components: {
         InputComponent,
-        ButtonComponent,
-        SpinnerComponent
+        ButtonComponent
     },
     setup() {
         const authStore = useAuthStore();
@@ -52,7 +47,6 @@ export default{
         const { isUserLogged } = storeToRefs(authStore);
 
         const isUserValid = ref(null);
-        const isLoading = ref(false);
 
         const setUserValidity = (isValid) => {
             isUserValid.value = isValid;
@@ -60,18 +54,14 @@ export default{
 
         const handleLogin = () => {
             if (isUserValid.value) {
-                isLoading.value = true;
                 setTimeout(() => {
-                    isLoading.value = false;
                     authStore.isUserLogged = true;
-                    console.log(authStore.isUserLogged)
                     router.push({ name: 'Home' });
                 }, 1500);
             }
         };
         return {
             isUserValid,
-            isLoading,
             isUserLogged,
             setUserValidity,
             handleLogin

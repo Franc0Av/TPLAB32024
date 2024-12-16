@@ -18,7 +18,7 @@
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-coin text-warning"></i>
-                    <InputTransactionComponent @inputChanged="handleAmount" :placeholder="transactionType == 'Compra' ? 'Monto a comprar' : 'Monto a vender'" />
+                    <InputTransactionComponent @inputChanged="handleAmount" :availableAmount="availableCoin" :placeholder="transactionType == 'Compra' ? 'Monto a comprar' : 'Monto a vender'" />
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-cash-coin text-success"></i>
@@ -28,7 +28,7 @@
                 <ButtonComponent :text="transactionType == 'Compra' ? 'Comprar' : 'Vender'" id="btn-custom" class="btn btn-lg" :disabled="price == null" data-bs-toggle="modal" data-bs-target="#staticBackdrop"/>
                 <button @click="handleTotals">Test</button>
             </form>
-            <ModalComponent :transactionBody="transactionBody" :cryptoSelected="selectedCrypto" modalTitle="Confirmar transacción" btnText="Confirmar"/>
+            <ModalComponent id="myModal" :transactionBody="transactionBody" :cryptoSelected="selectedCrypto" modalTitle="Confirmar transacción" btnText="Confirmar"/>
         </section>
 </template>
 
@@ -38,7 +38,7 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 import ModalComponent from './ModalComponent.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { storeToRefs } from 'pinia';
-import { calculateAmount, formatCryptoCoin, calculateTotals } from '@/views/Transactions/TransactionsView';
+import { calculateAmount, formatCryptoCoin } from '@/views/Transactions/TransactionsView';
 import { getTransactions } from '@/Services/transactions';
 import dayjs from 'dayjs';
 
@@ -101,17 +101,36 @@ export default {
 
             let cryptoCoin = await formatCryptoCoin(this.selectedCrypto);
 
-            if (this.amount && this.selectedCrypto) {
-                try 
-                {
-                    this.price = await calculateAmount(this.amount, cryptoCoin, this.transactionType);
-                } catch (error) 
-                {
-                    console.error("Error al calcular el monto:", error);
+            if(this.transactionType.toLowerCase() === 'compra')
+            {
+                if (this.amount && this.selectedCrypto) {
+                    try 
+                    {
+                        this.price = await calculateAmount(this.amount, cryptoCoin, this.transactionType);
+                    } catch (error) 
+                    {
+                        console.error("Error al calcular el monto:", error);
+                        this.price = null;
+                    }
+                } else {
                     this.price = null;
                 }
-            } else {
-                this.price = null;
+            }
+            else if(this.transactionType.toLowerCase() === 'venta'){
+
+                if(this.selectedCrypto && this.amount != null && this.amount <= this.availableCoin){
+                    
+                    try{
+                        this.price = await calculateAmount(this.amount, cryptoCoin, this.transactionType);
+                    } catch (error)
+                    {
+                        console.error("Error al calcular el monto:", error);
+                        this.price = null;
+                    }
+                }
+                else {
+                    this.price = null;
+                }
             }
         },
         async submitForm() {
@@ -135,17 +154,20 @@ export default {
 
             if(this.selectedCrypto)
             {
-                try{
+                // try{
 
-                    let crypto = await formatCryptoCoin(this.selectedCrypto);
-                    const data = await calculateTotals(this.user, crypto);
+                //     let crypto = await formatCryptoCoin(this.selectedCrypto);
+                //     const data = await calculateTotals(this.user, crypto);
     
-                    this.availableCoin = data;
+                //     this.availableCoin = data;
+                //     console.log('available coin:', this.availableCoin)
 
-                }catch (error){
-                    console.error("Error al obtener el monto disponible:", error);
-                    this.availableCoin = null;
-                }
+                // }catch (error){
+                //     console.error("Error al obtener el monto disponible:", error);
+                //     this.availableCoin = null;
+                // }
+
+                this.availableCoin = 25.02;
                 
             }
             else{

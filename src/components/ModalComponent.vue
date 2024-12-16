@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -7,7 +7,7 @@
                         <h1 class="modal-title fs-4 fw-bold" id="staticBackdropLabel">{{ modalTitle }}</h1>
                         <i class="bi bi-check-circle fs-4" style="color: green;"></i>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" id="btn-helper" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex flex-column gap-3">
                     <ListComponent :bodyList="transactionBody" :crypto="cryptoSelected"/>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <ButtonComponent :text="btnText" btnClass="btn" @click="handleConfirm" id="btn-custom" data-bs-dismiss="modal" />
+                    <ButtonComponent :text="btnText" btnClass="btn" @click="handleConfirm" id="btn-custom" />
                 </div>
             </div>
         </div>
@@ -30,6 +30,7 @@
 import ButtonComponent from './ButtonComponent.vue';
 import ToastComponent from './ToastComponent.vue';
 import ListComponent from './ListComponent.vue';
+//import { ref } from 'vue';
 //import { addTransaction } from '@/Services/transactions';
 
 export default {
@@ -50,6 +51,45 @@ export default {
         transactionBody: Object,
         cryptoSelected: String
     },
+    // setup() {
+
+    //     let toastColor = ref('');
+    //     let toastMessage = ref('');
+    //     const successToast = ref(null);
+
+    //     const handleConfirm = async () => {
+    //         try{
+    //             const success = true;
+
+    //             if (success) {
+    //                 toastColor.value = 'success';
+    //                 toastMessage.value = "Transacción realizada exitosamente";
+    //                 console.log('Transacción exitosa');
+    //             } else {
+    //                 toastMessage.value = "Algo salió mal, intenta nuevamente";
+    //                 toastColor.value = 'danger';
+    //                 console.warn('Transacción no fue exitosa');
+    //             }
+
+    //         } catch (error) {
+    //             console.error('Error al realizar la transacción:', error);
+    //         }
+    //         finally {
+    //             setTimeout(() => {
+    //                 if (successToast.value) {
+    //                     successToast.value.showToast();
+    //                 }
+    //             }, 300);
+    //         }
+    //     }
+
+    //     return {
+    //         toastMessage,
+    //         toastColor,
+    //         successToast,
+    //         handleConfirm
+    //     };
+    // },
     methods: {
         async handleConfirm(){
 
@@ -66,7 +106,6 @@ export default {
                 //     this.toastColor = 'danger';
                 //     console.warn('Transacción no fue exitosa:', response);
                 // }
-
                 const success = false;
 
                 if (success) {
@@ -84,8 +123,17 @@ export default {
             }
             finally {
                 setTimeout(() => {
+                    const button = document.getElementById('btn-helper')
+                    if (button) {
+                        button.click();
+                    } else {
+                        console.warn('Botón no encontrado');
+                    }
+                }, 1000);
+
+                setTimeout(() => {
                     this.$refs.successToast.showToast();
-                }, 300);
+                }, 1200);
             }
 
         }

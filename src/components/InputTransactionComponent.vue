@@ -21,7 +21,7 @@
   </template>
 
 <script>
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
 import amountValidate from '@/utils/transactionValidate';
 
 export default {
@@ -40,11 +40,16 @@ export default {
     },
     placeholder: {
       type: String
+    },
+    availableAmount: {
+      type: Number
     }
   },
   setup(props, { emit }) {
 
-    const { amountInput, inputClass, isValid } = amountValidate(props.type);
+    const availableAmountRef = ref(props.availableAmount);
+
+    const { amountInput, inputClass, isValid } = amountValidate(props.type, availableAmountRef);
 
     watch(
       () => props.modelValue,
@@ -66,6 +71,13 @@ export default {
     watch(amountInput, (newVal) => {
       emit('inputChanged', newVal);
     });
+
+    watch(
+      () => props.availableAmount,
+      (newVal) => {
+        availableAmountRef.value = newVal;
+      }
+    );
 
     return {
       amountInput,

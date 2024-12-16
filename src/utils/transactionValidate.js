@@ -1,6 +1,6 @@
 import { ref, computed, watch } from 'vue';
 
-export default function amountValidate(type = 'buy') {
+export default function amountValidate(type = 'buy', amountAvailable) {
   const amountInput = ref('');
   const isValid = ref(null);
 
@@ -28,7 +28,17 @@ export default function amountValidate(type = 'buy') {
         isValid.value = false;
         return;
       }
-      isValid.value = numericRegex.test(value) && parseFloat(value) > 0;
+
+      const regexValid = numericRegex.test(value);
+
+      if (amountAvailable.value != null) {
+        const numericValue = parseFloat(value);
+        const availableAmountt = amountAvailable.value;
+        isValid.value = regexValid && numericValue > 0 && numericValue <= availableAmountt;
+      } else {
+        isValid.value = regexValid && parseFloat(value) > 0;
+      }
+
     }
   });
 
