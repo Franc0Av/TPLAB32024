@@ -3,7 +3,7 @@
         @click="handleClick" 
         :class="btnClass" 
         type="submit"
-        :disabled="disabled"
+        :disabled="isLoading"
     >
     <span v-if="isLoading" class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
     {{ text }}
@@ -28,11 +28,6 @@ export default{
         },
     },
     emits: ['click'],
-    // data() {
-    //     return {
-    //         isLoading: false
-    //     }
-    // // },
     setup(_, { emit }) {
         const isLoading = ref(false);
 
