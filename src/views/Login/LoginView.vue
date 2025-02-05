@@ -1,5 +1,5 @@
 <template>
-    <section id="login-box" class="d-flex align-items-center justify-content-center">
+    <form @submit.prevent="handleLogin" id="login-box" class="d-flex align-items-center justify-content-center">
         <div class="login">
             <div>
                 <div class="avatar-login">
@@ -17,14 +17,9 @@
             <div :style="{ color: '#dc3545', height: '20px' }">
                 <small v-if="isUserValid === false">El usuario debe ser alfanumérico y contener al menos 5 caracteres.</small>
             </div>
-            <div v-if="isUserValid">
-                <ButtonComponent @click="handleLogin" id="btn-custom" btn-class="btn btn-lg" text="Ingresar"/>
-            </div>
-            <div v-else>
-                <ButtonComponent btn-class="btn btn-secondary btn-lg" text="Ingresar" disabled/>
-            </div>
+            <ButtonComponent @click="handleLogin" id="btn-custom" btn-class="btn btn-lg" text="Ingresar" :disabled="!isUserValid"/>
         </div>
-    </section>
+    </form>
 </template>
 
 <script>
@@ -60,6 +55,7 @@ export default{
                 }, 1500);
             }
         };
+
         return {
             isUserValid,
             isUserLogged,

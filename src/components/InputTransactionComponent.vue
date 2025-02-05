@@ -55,7 +55,7 @@ export default {
       () => props.modelValue,
       (newVal) => {
         if (newVal !== amountInput.value) {
-          amountInput.value = newVal;
+          amountInput.value = newVal ?? '';
         }
       }
     );

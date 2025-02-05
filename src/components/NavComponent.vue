@@ -19,11 +19,11 @@
             </div>
         </div>
         <div class="avatar">
-            <img src="../assets/avatar.svg" alt="">
-            ¡Hola, {{ user }}!
-            <button @click="logOut">
-                <ion-icon name="log-out-outline"></ion-icon>
-            </button>
+            <div class="d-flex justify-content-center align-items-center gap-1">
+                <ion-icon name="person-outline"></ion-icon>
+                <div>¡Hola, {{ user }}!</div>
+            </div>
+            <ion-icon @click="logOut" id="icon-logOut" name="log-out-outline"></ion-icon>
         </div>
     </div>
 </template>
@@ -80,7 +80,7 @@ export default {
 .avatar{
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
     padding-right: 2em;
     font-weight: bold;
     font-size: large;
@@ -120,6 +120,16 @@ ion-icon {
 .custom-link {
   color: inherit;
   text-decoration: none;
+}
+
+#icon-logOut{
+    cursor: pointer;
+    color: #6c63ff;
+    font-size: 1.7em;
+}
+
+#icon-logOut:hover{
+    font-size: 2em;
 }
 
 </style>

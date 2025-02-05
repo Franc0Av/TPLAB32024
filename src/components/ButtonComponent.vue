@@ -1,9 +1,9 @@
 <template>
     <button 
-        @click="handleClick" 
+        @click="handleClick"
         :class="btnClass" 
         type="submit"
-        :disabled="isLoading"
+        :disabled="isLoading || disabled"
     >
     <span v-if="isLoading" class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
     {{ text }}
@@ -20,19 +20,20 @@ export default{
         btnClass: String,
         onClick: {
             type: Function,
-            required: false, // Esto permite que sea opcional.
+            required: false
         },
         disabled: {
             type: Boolean,
-            default: false
+            default: false,
+            required: false
         },
     },
     emits: ['click'],
-    setup(_, { emit }) {
+    setup(props, { emit }) {
         const isLoading = ref(false);
 
         const handleClick = async () => {
-            if (isLoading.value) return;
+            if (isLoading.value || props.disabled) return;
 
             isLoading.value = true;
 
@@ -51,24 +52,7 @@ export default{
             handleClick
         } 
             
-    },
-    // methods: {
-    //     async handleClick() {
-    //         if (!this.disabled && typeof this.onClick === 'function') {
-    //             //this.onClick();
-    //             this.isLoading = true;
-    //             console.log('isloadin', this.isLoading)
-    //             //await this.onClick();
-    //             try {
-    //                 await this.onClick();
-    //             } finally {
-    //                 setTimeout(() => {
-    //                     this.isLoading = false;
-    //                 }, 1000);
-    //             }
-    //         }
-    //     }
-    // }
+    }
 };
 
 </script>

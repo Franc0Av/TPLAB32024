@@ -18,17 +18,24 @@
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-coin text-warning"></i>
-                    <InputTransactionComponent @inputChanged="handleAmount" :availableAmount="availableCoin" :placeholder="transactionType == 'Compra' ? 'Monto a comprar' : 'Monto a vender'" />
+                    <InputTransactionComponent v-model="amount" @inputChanged="handleAmount" :availableAmount="availableCoin" :placeholder="transactionType == 'Compra' ? 'Monto a comprar' : 'Monto a vender'" />
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-cash-coin text-success"></i>
                     <InputTransactionComponent v-model="price" type="pay" :placeholder="transactionType == 'Compra' ? 'Monto a pagar' : 'Monto a recibir'" readonly />
                   </div>
                 </div>
-                <ButtonComponent :text="transactionType == 'Compra' ? 'Comprar' : 'Vender'" id="btn-custom" class="btn btn-lg" :disabled="price == null" data-bs-toggle="modal" data-bs-target="#staticBackdrop"/>
-                <button @click="handleTotals">Test</button>
+                <ButtonComponent 
+                    @click="submitForm" 
+                    :text="transactionType == 'Compra' ? 'Comprar' : 'Vender'" 
+                    id="btn-custom" 
+                    class="btn btn-lg" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#staticBackdrop" 
+                    :disabled="price === null"
+                />
             </form>
-            <ModalComponent id="myModal" :transactionBody="transactionBody" :cryptoSelected="selectedCrypto" modalTitle="Confirmar transacción" btnText="Confirmar"/>
+            <ModalComponent @successfull="handleSuccess" :transactionBody="transactionBody" :cryptoSelected="selectedCrypto" modalTitle="Confirmar transacción" btnText="Confirmar"/>
         </section>
 </template>
 
@@ -63,6 +70,7 @@ export default {
             purchase: false,
             sale: false,
             price: null,
+            success: false,
             cryptocurrencies: [
                 { id: 1, name: "Bitcoin" },
                 { id: 2, name: "Ethereum" },
@@ -145,6 +153,7 @@ export default {
                 money: this.price,
                 datetime: formattedDate
             };
+            console.log(this.transactionBody)
         },
         async getUserTransactions() {
             const data = await getTransactions(this.user);
@@ -167,11 +176,19 @@ export default {
                 //     this.availableCoin = null;
                 // }
 
-                this.availableCoin = 25.02;
+                this.availableCoin = 2.02;
                 
             }
             else{
                 this.availableCoin = null;
+            }
+        },
+        async handleSuccess(value){
+            if(value){
+                this.selectedCrypto = "",
+                this.amount = "",
+                this.availableCoin = "",
+                this.price = ""
             }
         }
     }
@@ -190,5 +207,6 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    animation: fadeInUp 1s ease-out;
 }
 </style>
