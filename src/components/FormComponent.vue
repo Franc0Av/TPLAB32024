@@ -14,15 +14,15 @@
                   </div>
                   <div v-if="transactionType == 'Venta'" class="d-flex align-items-center fs-3">
                     <i class="bi bi-coin text-warning"></i>
-                    <InputTransactionComponent v-model="availableCoin" @inputChanged="handleAvailableCoin" placeholder='Monto disponible' readonly />
+                    <InputTransactionComponent v-model="availableCoin" placeholder='Monto disponible' readonly />
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-coin text-warning"></i>
-                    <InputTransactionComponent v-model="amount" @inputChanged="handleAmount" :availableAmount="availableCoin" :placeholder="transactionType == 'Compra' ? 'Monto a comprar' : 'Monto a vender'" />
+                    <InputTransactionComponent v-model="amount" :availableAmount="availableCoin" :placeholder="transactionType == 'Compra' ? 'Monto a comprar' : 'Monto a vender'" />
                   </div>
                   <div class="d-flex align-items-center fs-3">
                     <i class="bi bi-cash-coin text-success"></i>
-                    <InputTransactionComponent v-model="price" type="pay" :placeholder="transactionType == 'Compra' ? 'Monto a pagar' : 'Monto a recibir'" readonly />
+                    <InputTransactionComponent v-model="price" :placeholder="transactionType == 'Compra' ? 'Monto a pagar' : 'Monto a recibir'" readonly />
                   </div>
                 </div>
                 <ButtonComponent 
@@ -45,7 +45,7 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 import ModalComponent from './ModalComponent.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { storeToRefs } from 'pinia';
-import { calculateAmount, formatCryptoCoin } from '@/views/Transactions/TransactionsView';
+import { calculateAmount, formatCryptoCoin, calculateTotals } from '@/views/Transactions/TransactionsView';
 import { getTransactions } from '@/Services/transactions';
 import dayjs from 'dayjs';
 
@@ -99,12 +99,17 @@ export default {
         return { user };
     },
     methods: {
-        handleAmount(value) {
-            this.amount = value;
-        },
-        handleAvailableCoin(value){
-            this.availableCoin = value;
-        },
+        // handleAmount(value) {
+        //     this.amount = value;
+        // },
+        // handleAvailableCoin(value){
+        //     if(this.transactionType == 'Venta'){
+        //         this.availableCoin = value;
+        //     }
+        //     else{
+        //         this.availableCoin = null;
+        //     }
+        // },
         async updatePrice() {
 
             let cryptoCoin = await formatCryptoCoin(this.selectedCrypto);
@@ -153,7 +158,7 @@ export default {
                 money: this.price,
                 datetime: formattedDate
             };
-            console.log(this.transactionBody)
+            console.log('Cuerpo de transaccion:', this.transactionBody)
         },
         async getUserTransactions() {
             const data = await getTransactions(this.user);
@@ -161,22 +166,28 @@ export default {
         },
         async handleTotals(){
 
-            if(this.selectedCrypto)
+            if(this.selectedCrypto && this.transactionType == 'Venta')
             {
-                // try{
+                try{
 
-                //     let crypto = await formatCryptoCoin(this.selectedCrypto);
-                //     const data = await calculateTotals(this.user, crypto);
+                    let crypto = await formatCryptoCoin(this.selectedCrypto);
+                    const data = await calculateTotals(this.user, crypto);
     
-                //     this.availableCoin = data;
-                //     console.log('available coin:', this.availableCoin)
+                    this.availableCoin = data;
+                    console.log('available coin:', this.availableCoin)
 
-                // }catch (error){
-                //     console.error("Error al obtener el monto disponible:", error);
+                }catch (error){
+                    console.error("Error al obtener el monto disponible:", error);
+                    this.availableCoin = null;
+                }
+
+                // if(this.transactionType == 'Venta')
+                // {
+                //     this.availableCoin = 25;
+                // }
+                // else{
                 //     this.availableCoin = null;
                 // }
-
-                this.availableCoin = 2.02;
                 
             }
             else{

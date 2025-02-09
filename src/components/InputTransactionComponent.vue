@@ -47,7 +47,9 @@ export default {
   },
   setup(props, { emit }) {
 
+    debugger
     const availableAmountRef = ref(props.availableAmount);
+    // const typeRef = ref(props.type);
 
     const { amountInput, inputClass, isValid } = amountValidate(props.type, availableAmountRef);
 
@@ -64,9 +66,9 @@ export default {
       emit('update:modelValue', newVal);
     });
 
-    // watch(isValid, (newVal) => {
-    //   emit('validityChanged', newVal);
-    // });
+    watch(isValid, (newVal) => {
+      emit('validityChanged', newVal);
+    });
 
     watch(amountInput, (newVal) => {
       emit('inputChanged', newVal);

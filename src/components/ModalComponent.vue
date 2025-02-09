@@ -31,7 +31,7 @@ import ButtonComponent from './ButtonComponent.vue';
 import ToastComponent from './ToastComponent.vue';
 import ListComponent from './ListComponent.vue';
 import { ref } from 'vue';
-//import { addTransaction } from '@/Services/transactions';
+import { addTransaction } from '@/Services/transactions';
 
 export default {
     components: {
@@ -46,7 +46,7 @@ export default {
         cryptoSelected: String
     },
     emits: ["successfull"],
-    setup(_, { emit }) {
+    setup(props, { emit }) {
 
         let toastColor = ref('');
         let toastMessage = ref('');
@@ -55,33 +55,37 @@ export default {
         const handleConfirm = async () => {
             try{
 
-                // const response = await addTransaction(this.transactionBody);
+                const response = await addTransaction(props.transactionBody);
 
-                // if (response.success) {
-                //     toastColor.value = 'success';
-                //     toastMessage.value = "Transacción realizada exitosamente";
-                //     console.log('Transacción exitosa:', response);
-                // } else {
-                //     toastMessage.value = "Algo salió mal, intenta nuevamente";
-                //     toastColor.value = 'danger';
-                //     console.warn('Transacción no fue exitosa:', response);
-                // }
-
-                const success = true;
-
-                if (success) {
+                if (response.success) {
                     toastColor.value = 'success';
                     toastMessage.value = "Transacción realizada exitosamente";
 
                     emit('successfull', true)
-                    console.log('Transacción exitosa');
+                    console.log('Transacción exitosa:', response);
                 } else {
                     toastMessage.value = "Algo salió mal, intenta nuevamente";
                     toastColor.value = 'danger';
 
                     emit('successfull', false)
-                    console.warn('Transacción no fue exitosa');
+                    console.warn('Transacción no fue exitosa:', response);
                 }
+
+                // const success = true;
+
+                // if (success) {
+                //     toastColor.value = 'success';
+                //     toastMessage.value = "Transacción realizada exitosamente";
+
+                //     emit('successfull', true)
+                //     console.log('Transacción exitosa');
+                // } else {
+                //     toastMessage.value = "Algo salió mal, intenta nuevamente";
+                //     toastColor.value = 'danger';
+
+                //     emit('successfull', false)
+                //     console.warn('Transacción no fue exitosa');
+                // }
 
             } catch (error) {
                 console.error('Error al realizar la transacción:', error);
@@ -111,56 +115,6 @@ export default {
             handleConfirm
         };
     }
-    // methods: {
-    //     async handleConfirm(){
-
-    //         try {
-
-    //             // const response = await addTransaction(this.transactionBody);
-
-    //             // if (response.success) {
-    //             //     this.toastColor = 'success';
-    //             //     this.toastMessage = "Transacción realizada exitosamente";
-    //             //     console.log('Transacción exitosa:', response);
-    //             // } else {
-    //             //     this.toastMessage = "Algo salió mal, intenta nuevamente";
-    //             //     this.toastColor = 'danger';
-    //             //     console.warn('Transacción no fue exitosa:', response);
-    //             // }
-    //             const success = true;
-    //             console.log(this.transactionBody)
-
-    //             if (success) {
-    //                 this.toastColor = 'success';
-    //                 this.toastMessage = "Transacción realizada exitosamente";
-    //                 console.log('Transacción exitosa');
-    //             } else {
-    //                 this.toastMessage = "Algo salió mal, intenta nuevamente";
-    //                 this.toastColor = 'danger';
-    //                 console.warn('Transacción no fue exitosa');
-    //             }
-
-    //         } catch (error) {
-    //             console.error('Error al realizar la transacción:', error);
-    //         }
-    //         finally {
-    //             setTimeout(() => {
-    //                 const button = document.getElementById('btn-helper')
-    //                 if (button) {
-    //                     button.click();
-    //                     router.push({ name: 'Transactions' });
-    //                 } else {
-    //                     console.warn('Botón no encontrado');
-    //                 }
-    //             }, 1000);
-
-    //             setTimeout(() => {
-    //                 this.$refs.successToast.showToast();
-    //             }, 1200);
-    //         }
-
-    //     }
-    // }
 }
 </script>
 

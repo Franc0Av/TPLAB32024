@@ -106,7 +106,7 @@ ion-icon {
 }
 
 .icon-box:hover{
-    background-color: #6c63ff;
+    background-color: #9f99ff;
     color: white;
     cursor: pointer;
 }
@@ -130,6 +130,7 @@ ion-icon {
 
 #icon-logOut:hover{
     font-size: 2em;
+    transition: font-size 0.3s ease-in-out;
 }
 
 </style>

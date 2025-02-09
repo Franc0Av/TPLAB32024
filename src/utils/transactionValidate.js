@@ -21,6 +21,9 @@ export default function amountValidate(type = 'buy', amountAvailable) {
       isValid.value = null;
     }
     else{
+
+      type = amountAvailable.value != null ? 'pay' : 'buy';
+
       const numericRegex = regexRules[type];
 
       if(!numericRegex){
@@ -31,13 +34,21 @@ export default function amountValidate(type = 'buy', amountAvailable) {
 
       const regexValid = numericRegex.test(value);
 
-      if (amountAvailable.value != null) {
+      if (type === 'buy') {
+        isValid.value = regexValid && parseFloat(value) > 0;
+      } else if(type === 'pay' && amountAvailable.value != null) {
         const numericValue = parseFloat(value);
         const availableAmountt = amountAvailable.value;
         isValid.value = regexValid && numericValue > 0 && numericValue <= availableAmountt;
-      } else {
-        isValid.value = regexValid && parseFloat(value) > 0;
       }
+
+      // if (type === 'buy' && amountAvailable.value != null) {
+      //   const numericValue = parseFloat(value);
+      //   const availableAmountt = amountAvailable.value;
+      //   isValid.value = regexValid && numericValue > 0 && numericValue <= availableAmountt;
+      // } else {
+      //   isValid.value = regexValid && parseFloat(value) > 0;
+      // }
 
     }
   });
