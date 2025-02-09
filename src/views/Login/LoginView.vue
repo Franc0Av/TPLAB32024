@@ -1,5 +1,5 @@
 <template>
-    <section id="login-box" class="d-flex align-items-center justify-content-center">
+    <form @submit.prevent="handleLogin" id="login-box" class="d-flex align-items-center justify-content-center">
         <div class="login">
             <div>
                 <div class="avatar-login">
@@ -17,23 +17,14 @@
             <div :style="{ color: '#dc3545', height: '20px' }">
                 <small v-if="isUserValid === false">El usuario debe ser alfanumérico y contener al menos 5 caracteres.</small>
             </div>
-            <div v-if="isUserValid">
-                <ButtonComponent @click="handleLogin" id="btn-custom" btn-class="btn btn-lg" text="Ingresar"/>
-            </div>
-            <div v-else>
-                <ButtonComponent btn-class="btn btn-secondary btn-lg" text="Ingresar" disabled/>
-            </div>
-            <div v-if="isLoading" class="spinner-login">
-                <SpinnerComponent />
-            </div>
+            <ButtonComponent @click="handleLogin" id="btn-custom" btn-class="btn btn-lg" text="Ingresar" :disabled="!isUserValid"/>
         </div>
-    </section>
+    </form>
 </template>
 
 <script>
 import InputComponent from '@/components/InputComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
-import SpinnerComponent from '@/components/SpinnerComponent.vue';
 import { useAuthStore } from '@/stores/auth.js';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -43,39 +34,30 @@ export default{
     name: 'LoginView',
     components: {
         InputComponent,
-        ButtonComponent,
-        SpinnerComponent
+        ButtonComponent
     },
     setup() {
-        // Usamos useAuthStore() para acceder al store
         const authStore = useAuthStore();
         const router = useRouter();
-        const { isUserLogged } = storeToRefs(authStore); // Si necesitas acceder al estado del store directamente
+        const { isUserLogged } = storeToRefs(authStore);
 
-        // Definir variables reactivas
         const isUserValid = ref(null);
-        const isLoading = ref(false);
 
-        // Método para manejar la validez del usuario
         const setUserValidity = (isValid) => {
             isUserValid.value = isValid;
         };
 
         const handleLogin = () => {
             if (isUserValid.value) {
-                isLoading.value = true;
                 setTimeout(() => {
-                    isLoading.value = false;
                     authStore.isUserLogged = true;
-                    console.log(authStore.isUserLogged)
-                    // Navegar al Home después de login
                     router.push({ name: 'Home' });
                 }, 1500);
             }
         };
+
         return {
             isUserValid,
-            isLoading,
             isUserLogged,
             setUserValidity,
             handleLogin

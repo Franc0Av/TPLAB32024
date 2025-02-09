@@ -6,11 +6,11 @@
         </div>
         <div class="texto">
             <div>
-                <h1>¡Bienvenido a Cryptoexchange!</h1>
+                <h1>¡Bienvenido a XchangeX!</h1>
             </div>
             <div>
                 <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe veniam cupiditate voluptatem sunt tempore sed modi esse? Consequuntur fuga voluptates quasi, quam minus dolorem et eligendi eos asperiores nostrum ipsum?
+                    En XchangeX, te ofrecemos una plataforma segura, rápida e intuitiva para intercambiar tus criptomonedas favoritas. Nuestra misión es brindarte una experiencia de usuario excepcional mientras navegas en el emocionante mundo de las criptomonedas.
                 </p>
             </div>
         </div>
