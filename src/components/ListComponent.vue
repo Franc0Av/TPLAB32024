@@ -2,7 +2,7 @@
     <ul class="list-group">
         <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
             Fecha y hora de transacción:
-            <span class="badge text-bg-warning rounded-pill">{{ bodyList.datetime }}</span>
+            <span class="badge text-bg-warning rounded-pill">{{ formatDate(bodyList.datetime) }}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
             Transacción a realizar:
@@ -24,11 +24,18 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 
 export default {
     props: {
         bodyList: Object,
         crypto: String
+    },
+    methods:{
+        formatDate(dateString) {
+            dateString = dayjs(dateString).format('DD-MM-YYYY HH:mm');
+            return dateString;
+        }
     }
 }
 

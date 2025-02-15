@@ -126,11 +126,11 @@ ion-icon {
     cursor: pointer;
     color: #6c63ff;
     font-size: 1.7em;
+    transition: font-size 0.3s ease-in-out;
 }
 
 #icon-logOut:hover{
     font-size: 2em;
-    transition: font-size 0.3s ease-in-out;
 }
 
 </style>
