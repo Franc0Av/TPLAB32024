@@ -41,15 +41,6 @@ export default function amountValidate(type = 'buy', amountAvailable) {
         const availableAmountt = amountAvailable.value;
         isValid.value = regexValid && numericValue > 0 && numericValue <= availableAmountt;
       }
-
-      // if (type === 'buy' && amountAvailable.value != null) {
-      //   const numericValue = parseFloat(value);
-      //   const availableAmountt = amountAvailable.value;
-      //   isValid.value = regexValid && numericValue > 0 && numericValue <= availableAmountt;
-      // } else {
-      //   isValid.value = regexValid && parseFloat(value) > 0;
-      // }
-
     }
   });
 

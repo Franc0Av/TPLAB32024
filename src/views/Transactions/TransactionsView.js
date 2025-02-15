@@ -47,14 +47,14 @@ export async function calculateTotals(idUser, crypto) {
                 }
                 return totals;
             },
-            { totalPurchasesAmount: 0, totalSalesAmount: 0 } // Valores iniciales
+            { totalPurchasesAmount: 0, totalSalesAmount: 0 }
         );
 
         const totalAvailable = totalPurchasesAmount - totalSalesAmount;
 
         console.log(totalAvailable)
 
-        return totalAvailable.toFixed(2)
+        return totalAvailable
 
     }catch (error)
     {

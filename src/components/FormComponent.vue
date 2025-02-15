@@ -47,7 +47,6 @@ import { useAuthStore } from '@/stores/auth.js';
 import { storeToRefs } from 'pinia';
 import { calculateAmount, formatCryptoCoin, calculateTotals } from '@/views/Transactions/TransactionsView';
 import { getTransactions } from '@/Services/transactions';
-import dayjs from 'dayjs';
 
 export default {
     components:  {
@@ -99,17 +98,6 @@ export default {
         return { user };
     },
     methods: {
-        // handleAmount(value) {
-        //     this.amount = value;
-        // },
-        // handleAvailableCoin(value){
-        //     if(this.transactionType == 'Venta'){
-        //         this.availableCoin = value;
-        //     }
-        //     else{
-        //         this.availableCoin = null;
-        //     }
-        // },
         async updatePrice() {
 
             let cryptoCoin = await formatCryptoCoin(this.selectedCrypto);
@@ -148,15 +136,13 @@ export default {
         },
         async submitForm() {
 
-            const formattedDate = dayjs().format('DD-MM-YYYY HH:mm');
-
             this.transactionBody = {
                 user_id: this.user,
                 action: this.transactionType.toLowerCase() == "compra" ? "purchase" : "sale",
                 crypto_code: await formatCryptoCoin(this.selectedCrypto),
                 crypto_amount: this.amount,
                 money: this.price,
-                datetime: formattedDate
+                datetime: new Date().toISOString()
             };
             console.log('Cuerpo de transaccion:', this.transactionBody)
         },
